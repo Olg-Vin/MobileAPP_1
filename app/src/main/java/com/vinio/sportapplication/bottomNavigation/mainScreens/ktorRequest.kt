@@ -1,9 +1,9 @@
 package com.vinio.sportapplication.bottomNavigation.mainScreens
 
-import com.vinio.sportapplication.bottomNavigation.entity.Event
+import android.util.Log
+import com.vinio.sportapplication.bottomNavigation.entity.EventEntity
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.call.receive
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
@@ -30,20 +30,50 @@ private val client = HttpClient(CIO) {
     }
 }
 
-// Пример запроса с использованием этого клиента
-suspend fun fetchEvents(): List<Event> {
+suspend fun fetchEvents(): List<EventEntity> {
     return withContext(Dispatchers.IO) {
         try {
-            // Получаем ответ от сервера
-            val response: HttpResponse = client.get("https://your-api-endpoint.com/events")
+            // Отправка запроса на сервер
+            val response: HttpResponse = client.get("http://10.0.2.2:8080/api/event/user/deprecate/1")
 
-            // Парсим тело ответа в список событий
-            response.body<List<Event>>()
+            // Десериализация JSON-массива в List<Event>
+            val events: List<EventEntity> = response.body()
+
+            return@withContext events
         } catch (e: Exception) {
-            // Обработка ошибок
             e.printStackTrace()
-            emptyList()
+            return@withContext emptyList<EventEntity>()
         }
     }
 }
 
+// Функция для получения одного события
+suspend fun fetchOneEvent(): EventEntity {
+    return withContext(Dispatchers.IO) {
+        try {
+            // Отправка запроса на сервер
+            val response: HttpResponse = client.get("http://10.0.2.2:8080/api/event/dto/1")
+            Log.d("[RESP]", response.toString())
+            Log.d("[RESP]", response.body())
+            // Десериализация JSON-объекта в Event
+            val event = Json.decodeFromString(response.body()) as EventEntity // Используем body() для получения объекта
+
+            return@withContext event
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // В случае ошибки возвращаем пустое событие с дефолтными значениями
+            return@withContext EventEntity(
+                id = -1,
+                startTime = "LocalDateTime.now()",
+                endTime = "LocalDateTime.now()",
+                status = "Unknown",
+                title = "Error",
+                description = "No description available",
+                calories = 0,
+                category = "Unknown",
+                createdAt = "LocalDateTime.now()",
+                updatedAt = "LocalDateTime.now()"
+            )
+        }
+    }
+}

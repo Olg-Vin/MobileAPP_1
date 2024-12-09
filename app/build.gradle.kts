@@ -39,7 +39,7 @@ android {
         compose = true
     }
 }
-val ktor_version = "2.3.4"
+
 dependencies {
     implementation("io.ktor:ktor-client-core:2.3.4")
     implementation("io.ktor:ktor-client-android:2.3.4")
@@ -49,9 +49,15 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     // Ktor (Client for HTTP communication)
-    implementation("io.ktor:ktor-client-cio:$ktor_version")// CIO engine for Ktor
-    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version") // Content negotiation
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version") // Serialization with kotlinx
+    implementation("io.ktor:ktor-client-cio:2.3.4")// CIO engine for Ktor
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.4") // Content negotiation
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4") // Serialization with kotlinx
+
+    // Kotlin Standard Library
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20")
+    implementation("org.jetbrains.kotlin:kotlin-serialization:2.0.20")
+
 
     implementation("androidx.navigation:navigation-compose:2.8.4")
     implementation("androidx.compose.material:material:1.7.5")

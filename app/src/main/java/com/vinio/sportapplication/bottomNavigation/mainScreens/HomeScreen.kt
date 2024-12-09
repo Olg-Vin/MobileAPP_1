@@ -1,22 +1,12 @@
 package com.vinio.sportapplication.bottomNavigation.mainScreens
 
 import android.util.Log
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import com.vinio.sportapplication.bottomNavigation.entity.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +27,8 @@ fun EventListScreen() {
 
 //    val events = remember { mutableStateOf<List<Event>>(emptyList()) }
 
-    getEvents()
+    getOneEvent()
+//    getEvents()
 /*
     // Используем LazyColumn для отображения списка
     LazyColumn(
@@ -58,7 +49,17 @@ fun getEvents() {
         val events = fetchEvents() // Получаем список событий
         events.forEach {
             println("Event Title: ${it.title}, Start Time: ${it.startTime}")
+            Log.d("[Event]", "Event Title: ${it.title}, Start Time: ${it.startTime}")
         }
+    }
+}
+
+fun getOneEvent() {
+    CoroutineScope(Dispatchers.Main).launch {
+        val event = fetchOneEvent() // Получаем список событий
+        println("Event Title: ${event.title}, Start Time: ${event.startTime}")
+        Log.d("[Event]", "Event Title: ${event.title}, Start Time: ${event.startTime}")
+
     }
 }
 

@@ -1,32 +1,27 @@
 package com.vinio.sportapplication.bottomNavigation.entity
 
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
 
 
-@Serializable
-data class Event(
-    val id: Int,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val startTime: LocalDateTime,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val endTime: LocalDateTime,
+//@Serializable
+data class EventEntity(
+    val id: Long,
+    val startTime: String,
+    val endTime: String,
     val status: String,
     val title: String,
     val description: String,
     val calories: Int,
     val category: String,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val createdAt: LocalDateTime,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val updatedAt: LocalDateTime
-)
+    val createdAt: String,
+    val updatedAt: String
+) : java.io.Serializable
 
 
-@Serializable
+//@Serializable
 data class EventResponse(
-    val events: List<Event>
-)
+    val events: List<EventEntity>
+) : java.io.Serializable
 
 
 @Serializable
