@@ -3,7 +3,7 @@ package com.vinio.sportapplication.bottomNavigation.entity
 import kotlinx.serialization.Serializable
 
 
-//@Serializable
+@Serializable
 data class EventEntity(
     val id: Long,
     val startTime: String,
@@ -15,13 +15,13 @@ data class EventEntity(
     val category: String,
     val createdAt: String,
     val updatedAt: String
-) : java.io.Serializable
+)
 
 
-//@Serializable
+@Serializable
 data class EventResponse(
     val events: List<EventEntity>
-) : java.io.Serializable
+)
 
 
 @Serializable

@@ -15,28 +15,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
-// Ваш новый HttpClient на основе CIO
 private val client = HttpClient(CIO) {
-    // Устанавливаем поддержку ContentNegotiation для работы с JSON
     install(ContentNegotiation) {
         json(Json {
-            ignoreUnknownKeys = true // Игнорировать неизвестные ключи
+            ignoreUnknownKeys = true
         })
     }
-
-    // Устанавливаем логирование запросов и ответов
     install(Logging) {
-        level = LogLevel.ALL // Логировать все запросы и ответы
+        level = LogLevel.ALL
     }
 }
 
 suspend fun fetchEvents(): List<EventEntity> {
     return withContext(Dispatchers.IO) {
         try {
-            // Отправка запроса на сервер
-            val response: HttpResponse = client.get("http://10.0.2.2:8080/api/event/user/deprecate/1")
-
-            // Десериализация JSON-массива в List<Event>
+            val response: HttpResponse = client.get("http://10.0.2.2:8080/api/event/user/1")
             val events: List<EventEntity> = response.body()
 
             return@withContext events
@@ -47,21 +40,17 @@ suspend fun fetchEvents(): List<EventEntity> {
     }
 }
 
-// Функция для получения одного события
 suspend fun fetchOneEvent(): EventEntity {
     return withContext(Dispatchers.IO) {
         try {
-            // Отправка запроса на сервер
             val response: HttpResponse = client.get("http://10.0.2.2:8080/api/event/dto/1")
             Log.d("[RESP]", response.toString())
             Log.d("[RESP]", response.body())
-            // Десериализация JSON-объекта в Event
-            val event = Json.decodeFromString(response.body()) as EventEntity // Используем body() для получения объекта
+            val event = Json.decodeFromString(response.body()) as EventEntity
 
             return@withContext event
         } catch (e: Exception) {
             e.printStackTrace()
-            // В случае ошибки возвращаем пустое событие с дефолтными значениями
             return@withContext EventEntity(
                 id = -1,
                 startTime = "LocalDateTime.now()",
