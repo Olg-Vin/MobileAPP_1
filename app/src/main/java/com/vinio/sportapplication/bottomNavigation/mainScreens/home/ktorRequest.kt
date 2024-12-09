@@ -1,6 +1,5 @@
-package com.vinio.sportapplication.bottomNavigation.mainScreens
+package com.vinio.sportapplication.bottomNavigation.mainScreens.home
 
-import android.util.Log
 import com.vinio.sportapplication.bottomNavigation.entity.EventEntity
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -40,7 +39,7 @@ suspend fun fetchEvents(): List<EventEntity> {
     }
 }
 
-suspend fun fetchOneEvent(): EventEntity {
+/*suspend fun fetchOneEvent(): EventEntity {
     return withContext(Dispatchers.IO) {
         try {
             val response: HttpResponse = client.get("http://10.0.2.2:8080/api/event/dto/1")
@@ -65,4 +64,4 @@ suspend fun fetchOneEvent(): EventEntity {
             )
         }
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.vinio.sportapplication.bottomNavigation.mainScreens
+package com.vinio.sportapplication.bottomNavigation.mainScreens.navigation
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.BottomNavigation

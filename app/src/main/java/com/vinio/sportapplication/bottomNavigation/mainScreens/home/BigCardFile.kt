@@ -1,11 +1,10 @@
-package com.vinio.sportapplication.bottomNavigation.mainScreens
+package com.vinio.sportapplication.bottomNavigation.mainScreens.home
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,10 +13,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,8 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.vinio.sportapplication.bottomNavigation.entity.EventEntity
 
-@Composable
+/*@Composable
 fun TaskScreen() {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -39,16 +35,17 @@ fun TaskScreen() {
             TaskPopupDialog(onDismiss = { showDialog = false })
         }
     }
-}
-
+}*/
 @Composable
-fun TaskPopupDialog(onDismiss: () -> Unit) {
+fun TaskPopupDialog(event: EventEntity, onDismiss: () -> Unit) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
             shape = RoundedCornerShape(16.dp),
-            color = Color(0xFFEFF7E6), // Светло-зеленый цвет
-            modifier = Modifier.padding(16.dp)
-        ) {
+            color = Color(0xFFEFF7E6),
+            modifier = Modifier
+                .fillMaxWidth(1f) // 90% ширины экрана
+                .fillMaxHeight(0.6f) // 80% высоты экрана
+        )  {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -56,7 +53,7 @@ fun TaskPopupDialog(onDismiss: () -> Unit) {
             ) {
                 // Заголовок
                 Text(
-                    text = "Пробежка в лесу",
+                    text = event.title,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -66,7 +63,7 @@ fun TaskPopupDialog(onDismiss: () -> Unit) {
 
                 // Описание
                 Text(
-                    text = "Артур позвал сегодня погулять в лес, пробежаться перед ультрамарафоном – не забудь перед этим сделать:",
+                    text = event.description,
                     fontSize = 16.sp,
                     color = Color.Black
                 )
@@ -76,10 +73,8 @@ fun TaskPopupDialog(onDismiss: () -> Unit) {
                 // Список задач
                 Text(
                     text = """
-                        1. Взять с собой бутылку воды
-                        2. Зарядить телефон
-                        3. Постирать вещи
-                        4. Приготовить творожную массу
+                        Категория: ${event.category}
+                        Калории: ${event.calories}
                     """.trimIndent(),
                     fontSize = 16.sp,
                     color = Color.Black
@@ -99,7 +94,7 @@ fun TaskPopupDialog(onDismiss: () -> Unit) {
                             color = Color.Gray
                         )
                         Text(
-                            text = "14:00",
+                            text = "${formatTime(event.startTime)} - ${formatTime(event.endTime)}",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -111,14 +106,14 @@ fun TaskPopupDialog(onDismiss: () -> Unit) {
                             color = Color.Gray
                         )
                         Text(
-                            text = "В процессе",
+                            text = event.status,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.fillMaxHeight(0.8f))
 
                 // Кнопка закрытия
                 Button(

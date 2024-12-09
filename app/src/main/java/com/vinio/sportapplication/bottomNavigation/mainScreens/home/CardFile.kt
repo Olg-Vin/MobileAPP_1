@@ -1,4 +1,4 @@
-package com.vinio.sportapplication.bottomNavigation.mainScreens
+package com.vinio.sportapplication.bottomNavigation.mainScreens.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,26 +19,8 @@ import com.vinio.sportapplication.bottomNavigation.entity.EventEntity
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
-//@Preview
 @Composable
 fun CardMain(event: EventEntity) {
-//fun CardMain() {
-//    TODO потом удалить, это mock
-    /*val event = Event(
-        id = 1,
-        userId = 123,
-        startTime = LocalDateTime.now(),
-        endTime = LocalDateTime.now().plusHours(2),
-        status = "выполняется",
-        title = "Пробежка в лесу",
-        description = "Выполнение упражнения для здоровья",
-        calories = 150,
-        category = "спорт",
-        createdAt = LocalDateTime.now(),
-        updatedAt = LocalDateTime.now()
-    )*/
-
     var showDialog by remember { mutableStateOf(false) }
 
     Card(
@@ -71,8 +53,7 @@ fun CardMain(event: EventEntity) {
                 )
             }
             Text(
-//                text = formatTime(event.startTime),
-                text = event.startTime,
+                text = formatTime(event.startTime),
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -83,7 +64,7 @@ fun CardMain(event: EventEntity) {
 
         // Вызов диалога, если showDialog = true
         if (showDialog) {
-            TaskPopupDialog(onDismiss = { showDialog = false }) // Закрытие диалога
+            TaskPopupDialog(event = event, onDismiss = { showDialog = false })
         }
     }
 }

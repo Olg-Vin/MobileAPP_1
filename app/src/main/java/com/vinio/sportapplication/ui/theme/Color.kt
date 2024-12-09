@@ -14,3 +14,4 @@ val BlueButton = Color(0xFF6996E7)
 val BlueText = Color(0xFFC2D9EA)
 
 val CardBackground = Color(0f, 0.5f, 0f, 0.1f)
+val SuperWhite = Color(0xFFFFFFFF)
