@@ -11,7 +11,7 @@ fun NavGraph(
 ) {
     NavHost(navController = navHostController, startDestination = "screen_1") {
         composable("screen_1") {
-            Screen1()
+            EventListScreen()
         }
         composable("screen_2") {
             Screen2()

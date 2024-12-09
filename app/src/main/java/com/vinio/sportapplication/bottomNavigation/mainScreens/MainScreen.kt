@@ -14,7 +14,6 @@ fun MainScreen() {
             CustomBottomNav(navController = navController)
         }
     ) {
-
         NavGraph(navHostController = navController)
     }
 }

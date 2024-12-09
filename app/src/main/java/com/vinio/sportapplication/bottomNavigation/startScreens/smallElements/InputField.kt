@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vinio.sportapplication.ui.theme.BlueText
@@ -18,7 +19,8 @@ import com.vinio.sportapplication.ui.theme.BlueText
 fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    placeholderText: String
+    placeholderText: String,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     OutlinedTextField(
         value = value,
@@ -33,6 +35,7 @@ fun CustomTextField(
                 text = placeholderText,
                 style = TextStyle(fontSize = 16.sp, color = BlueText)
             )
-        }
+        },
+        visualTransformation = visualTransformation,
     )
 }

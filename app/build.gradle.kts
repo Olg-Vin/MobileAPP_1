@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.21"
 }
 
 android {
@@ -38,8 +39,20 @@ android {
         compose = true
     }
 }
-
+val ktor_version = "2.3.4"
 dependencies {
+    implementation("io.ktor:ktor-client-core:2.3.4")
+    implementation("io.ktor:ktor-client-android:2.3.4")
+    implementation("io.ktor:ktor-client-serialization:2.3.4")
+    implementation("io.ktor:ktor-client-logging:2.3.4")
+    implementation("io.ktor:ktor-client-json:2.3.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+    // Ktor (Client for HTTP communication)
+    implementation("io.ktor:ktor-client-cio:$ktor_version")// CIO engine for Ktor
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version") // Content negotiation
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version") // Serialization with kotlinx
+
     implementation("androidx.navigation:navigation-compose:2.8.4")
     implementation("androidx.compose.material:material:1.7.5")
     implementation("androidx.compose.material3:material3:1.3.1")

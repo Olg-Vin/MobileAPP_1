@@ -1,5 +1,6 @@
 package com.vinio.sportapplication.bottomNavigation.mainScreens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,9 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,7 +23,6 @@ import com.vinio.sportapplication.bottomNavigation.startScreens.smallElements.Cu
 
 @Composable
 fun ScreenSignIn(onClick: () -> Unit) {
-    val message = remember { mutableStateOf("") }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -35,10 +33,6 @@ fun ScreenSignIn(onClick: () -> Unit) {
             textAlign = TextAlign.Center,
             fontSize = 30.sp
         )
-        TextField(
-            value = message.value,
-            onValueChange = {newText -> message.value = newText}
-        )
         var email by remember { mutableStateOf("") }
         CustomTextField(
             value = email,
@@ -48,7 +42,7 @@ fun ScreenSignIn(onClick: () -> Unit) {
         Spacer(modifier = Modifier.height(30.dp))
         Button(
             onClick = {
-
+                onClick()
             }
         ) {
             Text(text = "To sign up")
@@ -78,16 +72,7 @@ fun ScreenSignUp(onClick: () -> Unit) {
 }
 
 
-@Composable
-fun Screen1() {
-    Text(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentHeight(),
-        text = "Screen1",
-        textAlign = TextAlign.Center,
-    )
-}
+
 
 @Composable
 fun Screen2() {
