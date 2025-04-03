@@ -41,6 +41,9 @@ android {
 }
 
 dependencies {
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation("androidx.compose.foundation:foundation:1.4.0")
+
     implementation("io.ktor:ktor-client-core:2.3.4")
     implementation("io.ktor:ktor-client-android:2.3.4")
     implementation("io.ktor:ktor-client-serialization:2.3.4")

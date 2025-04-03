@@ -28,9 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.vinio.sportapplication.bottomNavigation.entity.EventEntity
 import com.vinio.sportapplication.bottomNavigation.mainScreens.home.EventViewModel
+import com.vinio.sportapplication.bottomNavigation.notification.MyWorker
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun AddEventPopup(onDismiss: () -> Unit, viewModel: EventViewModel = viewModel()) {
@@ -110,9 +115,9 @@ fun AddEventPopup(onDismiss: () -> Unit, viewModel: EventViewModel = viewModel()
                             title = title.value.text,
                             description = description.value.text,
                             status = status.value.text,
-//                            startTime = LocalDateTime.parse(startTime.value.text, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-//                            endTime = LocalDateTime.parse(endTime.value.text, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                            startTime = LocalDateTime.now(),
+//                startTime = LocalDateTime.parse(startTime.value.text, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+//                endTime = LocalDateTime.parse(endTime.value.text, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                            startTime = LocalDateTime.now().plusHours(1), // Для теста установим время события через 1 час
                             endTime = LocalDateTime.now(),
                             calories = calories.value.text.toIntOrNull() ?: 0,
                             category = category.value.text,
@@ -122,6 +127,23 @@ fun AddEventPopup(onDismiss: () -> Unit, viewModel: EventViewModel = viewModel()
 
                         // Добавляем событие в ViewModel
                         viewModel.addEvent(event, context)
+
+                        // Вычисляем время до события в миллисекундах
+                        val eventStartTimeMillis = event.startTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                        val currentTimeMillis = System.currentTimeMillis()
+
+                        // Вычисляем задержку, которая будет равна 1 часу до начала события
+                        val timeToTriggerNotification = eventStartTimeMillis - (60 * 60 * 1000) - currentTimeMillis
+
+                        // Если задержка больше 0, планируем уведомление
+                        if (timeToTriggerNotification > 0) {
+                            val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
+                                .setInitialDelay(timeToTriggerNotification, TimeUnit.MILLISECONDS)
+                                .build()
+
+                            // Отправляем задачу в WorkManager
+                            WorkManager.getInstance(context).enqueue(workRequest)
+                        }
 
                         // Закрываем попап
                         onDismiss()

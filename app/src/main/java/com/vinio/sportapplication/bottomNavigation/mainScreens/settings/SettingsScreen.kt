@@ -22,7 +22,7 @@ fun SettingsScreen(
         )
         SettingsButton(
             text = "Уведомления",
-            onClick = { /*TODO*/ }
+            onClick = { navController.navigate("notification_screen") }
         )
         SettingsButton(
             text = "Связь с устройством",

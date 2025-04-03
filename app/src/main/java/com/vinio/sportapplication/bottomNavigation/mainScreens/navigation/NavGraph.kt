@@ -12,6 +12,7 @@ import com.vinio.sportapplication.bottomNavigation.mainScreens.settings.ChangePa
 import com.vinio.sportapplication.bottomNavigation.mainScreens.settings.SettingsScreen
 import com.vinio.sportapplication.bottomNavigation.mainScreens.settings.UserDataScreen
 import com.vinio.sportapplication.bottomNavigation.mainScreens.settings.UserDetailsScreen
+import com.vinio.sportapplication.bottomNavigation.notification.NotificationSettingsScreen
 import com.vinio.sportapplication.bottomNavigation.startScreens.SignInScreen
 
 @Composable
@@ -47,6 +48,10 @@ fun NavGraph(
         composable("main_screen") {
             SignInScreen(navHostController)
         }
+        composable("notification_screen") {
+            NotificationSettingsScreen(navHostController)
+        }
+
     }
 }
 
