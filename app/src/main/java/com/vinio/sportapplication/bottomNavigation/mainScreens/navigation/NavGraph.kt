@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.vinio.sportapplication.bottomNavigation.mainScreens.Calculate.CalculateScreen
 import com.vinio.sportapplication.bottomNavigation.mainScreens.Screen3
 import com.vinio.sportapplication.bottomNavigation.mainScreens.calendar.CalendarScreen
 import com.vinio.sportapplication.bottomNavigation.mainScreens.home.EventListScreen
@@ -28,7 +29,7 @@ fun NavGraph(
             CalendarScreen()
         }
         composable("screen_3") {
-            Screen3()
+            CalculateScreen()
         }
         composable("screen_4") {
             SettingsScreen(navHostController)

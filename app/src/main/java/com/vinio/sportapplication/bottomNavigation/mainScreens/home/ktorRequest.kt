@@ -1,5 +1,7 @@
 package com.vinio.sportapplication.bottomNavigation.mainScreens.home
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.vinio.sportapplication.bottomNavigation.entity.EventEntity
 import io.ktor.client.HttpClient
@@ -8,6 +10,7 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
@@ -15,15 +18,13 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import android.content.Context
-import android.content.SharedPreferences
-import io.ktor.http.HttpStatusCode
 
 // Объявляем глобальный клиент
 val client = HttpClient(CIO) {
@@ -91,6 +92,35 @@ suspend fun sendEventToServer(event: EventEntity, context: Context): Boolean {
         }
     }
 }
+
+suspend fun deleteEventFromServer(eventId: Long, context: Context): Boolean {
+    return withContext(Dispatchers.IO) {
+        try {
+            // Получаем токен из SharedPreferences
+            val token: String = getToken(context).toString()
+
+            // Отправляем запрос на сервер для удаления события
+            val response: HttpResponse = client.delete("http://10.0.2.2:8080/api/events/$eventId") {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token") // Добавляем токен в заголовок
+                }
+            }
+
+            // Проверка статуса ответа
+            if (response.status == HttpStatusCode.NoContent) {
+                Log.d("deleteEvent", "Event successfully deleted from server")
+                return@withContext true
+            } else {
+                Log.e("deleteEvent", "Failed to delete event: ${response.status}")
+                return@withContext false
+            }
+        } catch (e: Exception) {
+            Log.e("deleteEvent", "Error deleting event: ${e.message}")
+            return@withContext false
+        }
+    }
+}
+
 
 
 // Данные для запроса на регистрацию

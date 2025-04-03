@@ -49,8 +49,12 @@ fun SchedulePopup(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
+
+                // Если есть события, выводим их в LazyColumn
                 if (events.isNotEmpty()) {
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier.weight(1f) // Заставляем LazyColumn занимать всё доступное пространство
+                    ) {
                         items(events) { event ->
                             TaskItem(
                                 title = event.title,
@@ -63,14 +67,16 @@ fun SchedulePopup(
                 } else {
                     Text("События не найдены", fontSize = 16.sp, color = Color.Gray)
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = onDismiss) {
+
+                Spacer(modifier = Modifier.height(16.dp)) // Добавляем дополнительный отступ перед кнопкой
+                Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Закрыть")
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun TaskItem(title: String, time: String, status: String) {

@@ -11,7 +11,7 @@ data class EventEntity(
     val startTime: LocalDateTime,
     @Serializable(LocalDateTimeSerializer::class)
     val endTime: LocalDateTime,
-    val status: String,
+    var status: String,
     val title: String,
     val description: String,
     val calories: Int,

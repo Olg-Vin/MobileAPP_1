@@ -13,14 +13,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.vinio.sportapplication.bottomNavigation.entity.EventEntity
+import kotlinx.coroutines.launch
 
 /*@Composable
 fun TaskScreen() {
@@ -38,6 +41,8 @@ fun TaskScreen() {
 }*/
 @Composable
 fun TaskPopupDialog(event: EventEntity, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
             shape = RoundedCornerShape(16.dp),
@@ -113,9 +118,25 @@ fun TaskPopupDialog(event: EventEntity, onDismiss: () -> Unit) {
                     }
                 }
 
-                Spacer(modifier = Modifier.fillMaxHeight(0.8f))
+                Spacer(modifier = Modifier.fillMaxHeight(0.6f))
 
-                // Кнопка закрытия
+                if (event.status == "In process") {
+                    Button(
+                        onClick = {
+                            onDismiss()
+                            event.status = "ready"
+                            coroutineScope.launch {
+                                sendEventToServer(
+                                    event,
+                                    context
+                                )
+                            }
+                        },
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(text = "Отметить выполненым")
+                    }
+                }
                 Button(
                     onClick = { onDismiss() },
                     modifier = Modifier.align(Alignment.CenterHorizontally)

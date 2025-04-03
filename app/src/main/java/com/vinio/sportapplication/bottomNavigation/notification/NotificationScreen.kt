@@ -1,6 +1,7 @@
 package com.vinio.sportapplication.bottomNavigation.notification
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,19 +40,19 @@ fun NotificationSettingsScreen(
     var isDailySummaryNotificationsEnabled by remember { mutableStateOf(true) }
 
     Column(modifier = Modifier.padding(16.dp)) {
-        Text("Notification Settings", style = MaterialTheme.typography.h5)
 
-        Spacer(modifier = Modifier.height(24.dp))
+
+        Spacer(modifier = Modifier.height(104.dp))
 
         // Переключатель для уведомлений о событиях
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Event Notifications")
+            Text("Уведомлять о событиях")
             Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = isEventNotificationsEnabled,
                 onCheckedChange = { isEnabled ->
+                    Log.d("enableNotification", isEnabled.toString())
                     isEventNotificationsEnabled = isEnabled
-                    // Включаем или отключаем уведомления для события
                     setNotificationsEnabled(context, "events_channel", isEnabled)
                 }
             )
@@ -61,11 +62,12 @@ fun NotificationSettingsScreen(
 
         // Переключатель для уведомлений о новостях
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("News Notifications")
+            Text("Уведомлять о новостях")
             Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = isNewsNotificationsEnabled,
                 onCheckedChange = { isEnabled ->
+                    Log.d("enableNotification", isEnabled.toString())
                     isNewsNotificationsEnabled = isEnabled
                     // Включаем или отключаем уведомления для новостей
                     setNotificationsEnabled(context, "news_channel", isEnabled)
@@ -77,11 +79,12 @@ fun NotificationSettingsScreen(
 
         // Переключатель для уведомлений о итогах дня
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Daily Summary Notifications")
+            Text("Пуши с итогом калорий за день")
             Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = isDailySummaryNotificationsEnabled,
                 onCheckedChange = { isEnabled ->
+                    Log.d("enableNotification", isEnabled.toString())
                     isDailySummaryNotificationsEnabled = isEnabled
                     // Включаем или отключаем уведомления для итогов дня
                     setNotificationsEnabled(context, "daily_summary_channel", isEnabled)
