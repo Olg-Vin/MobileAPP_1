@@ -43,3 +43,31 @@ data class User(
 @Serializable
 data class Role(val role: String)
 
+// Модель данных для пользователя
+@Serializable
+data class UserData(
+    val username: String,
+    val email: String,
+    @Serializable(LocalDateTimeSerializer::class)
+    val createdAt: LocalDateTime,
+    @Serializable(LocalDateTimeSerializer::class)
+    val updatedAt: LocalDateTime
+)
+
+@Serializable
+data class PasswordUpdateRequest(
+    val oldPassword: String,
+    val newPassword: String
+)
+
+@Serializable
+data class EmailUpdateRequest(
+    val oldEmail: String,
+    val newEmail: String
+)
+
+@Serializable
+data class JwtResponse(
+    val accessToken: String,
+    val refreshToken: String
+)

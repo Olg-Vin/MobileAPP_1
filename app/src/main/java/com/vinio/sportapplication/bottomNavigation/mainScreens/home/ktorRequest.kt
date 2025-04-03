@@ -26,7 +26,7 @@ import android.content.SharedPreferences
 import io.ktor.http.HttpStatusCode
 
 // Объявляем глобальный клиент
-private val client = HttpClient(CIO) {
+val client = HttpClient(CIO) {
     install(ContentNegotiation) {
         json(Json {
             ignoreUnknownKeys = true
@@ -167,4 +167,11 @@ fun saveToken(context: Context, token: String) {
 fun getToken(context: Context): String? {
     val sharedPreferences: SharedPreferences = context.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
     return sharedPreferences.getString("ACCESS_TOKEN", null)
+}
+
+fun clearToken(context: Context) {
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.remove("ACCESS_TOKEN")
+    editor.apply()
 }
