@@ -1,10 +1,8 @@
 package com.vinio.sportapplication.bottomNavigation.mainScreens.calendar
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,174 +11,137 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
-import androidx.lifecycle.ViewModel
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vinio.sportapplication.bottomNavigation.entity.EventEntity
 import com.vinio.sportapplication.bottomNavigation.mainScreens.home.EventViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun AddEventPopup(onDismiss: () -> Unit, viewModel: EventViewModel = viewModel()) {
-    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
-    // Состояния для полей ввода
-    var title by remember { mutableStateOf(TextFieldValue("")) }
-    var description by remember { mutableStateOf(TextFieldValue("")) }
-    var status by remember { mutableStateOf(TextFieldValue("")) }
-    var startTime by remember { mutableStateOf(TextFieldValue("")) }
-    var endTime by remember { mutableStateOf(TextFieldValue("")) }
+    val title = remember { mutableStateOf(TextFieldValue("")) }
+    val description = remember { mutableStateOf(TextFieldValue("")) }
+    val status = remember { mutableStateOf(TextFieldValue("")) }
+    val startTime = remember { mutableStateOf(TextFieldValue("")) }
+    val endTime = remember { mutableStateOf(TextFieldValue("")) }
+    val calories = remember { mutableStateOf(TextFieldValue("")) }
+    val category = remember { mutableStateOf(TextFieldValue("")) }
 
-    Popup(onDismissRequest = onDismiss) {
-        Box(
+    val focusManager = LocalFocusManager.current
+    val titleFocusRequester = remember { FocusRequester() }
+    val descriptionFocusRequester = remember { FocusRequester() }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0x80000000)) // Полупрозрачный фон
-                .padding(32.dp),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .background(Color.White, shape = RoundedCornerShape(16.dp))
+                .padding(16.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White, shape = RoundedCornerShape(16.dp))
-                    .padding(16.dp)
+            Text(
+                text = "Добавить событие",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            // Field input
+            @Composable
+            fun inputField(
+                value: MutableState<TextFieldValue>,
+                placeholder: String,
+                focusRequester: FocusRequester
             ) {
-                Text(
-                    text = "Добавить событие",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
-                // Поля ввода для события
                 BasicTextField(
-                    value = title,
-                    onValueChange = { title = it },
+                    value = value.value,
+                    onValueChange = { value.value = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 8.dp)
                         .background(Color(0xFFF1F1F1), RoundedCornerShape(8.dp))
-                        .padding(12.dp),
+                        .padding(12.dp)
+                        .focusRequester(focusRequester)
+                        .onFocusChanged {
+                            if (it.isFocused) {
+                                focusManager.moveFocus(FocusDirection.Down) // Move focus to next field when user interacts
+                            }
+                        },
                     decorationBox = { innerTextField ->
-                        if (title.text.isEmpty()) {
-                            Text("Введите название", color = Color.Gray)
+                        if (value.value.text.isEmpty()) {
+                            Text(placeholder, color = Color.Gray)
                         }
                         innerTextField()
                     }
                 )
+            }
 
-                BasicTextField(
-                    value = description,
-                    onValueChange = { description = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                        .background(Color(0xFFF1F1F1), RoundedCornerShape(8.dp))
-                        .padding(12.dp),
-                    decorationBox = { innerTextField ->
-                        if (description.text.isEmpty()) {
-                            Text("Введите описание", color = Color.Gray)
-                        }
-                        innerTextField()
-                    }
-                )
+            inputField(title, "Введите название", titleFocusRequester)
+            inputField(description, "Введите описание", descriptionFocusRequester)
+            inputField(status, "Введите статус", titleFocusRequester)
+            inputField(category, "Введите категорию", titleFocusRequester)
+            inputField(startTime, "Введите время начала", descriptionFocusRequester)
+            inputField(endTime, "Введите время окончания", titleFocusRequester)
 
-                BasicTextField(
-                    value = status,
-                    onValueChange = { status = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                        .background(Color(0xFFF1F1F1), RoundedCornerShape(8.dp))
-                        .padding(12.dp),
-                    decorationBox = { innerTextField ->
-                        if (status.text.isEmpty()) {
-                            Text("Введите статус", color = Color.Gray)
-                        }
-                        innerTextField()
-                    }
-                )
+            Spacer(modifier = Modifier.height(16.dp))
 
-                BasicTextField(
-                    value = startTime,
-                    onValueChange = { startTime = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                        .background(Color(0xFFF1F1F1), RoundedCornerShape(8.dp))
-                        .padding(12.dp),
-                    decorationBox = { innerTextField ->
-                        if (startTime.text.isEmpty()) {
-                            Text("Введите время начала", color = Color.Gray)
-                        }
-                        innerTextField()
-                    }
-                )
-
-                BasicTextField(
-                    value = endTime,
-                    onValueChange = { endTime = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                        .background(Color(0xFFF1F1F1), RoundedCornerShape(8.dp))
-                        .padding(12.dp),
-                    decorationBox = { innerTextField ->
-                        if (endTime.text.isEmpty()) {
-                            Text("Введите время окончания", color = Color.Gray)
-                        }
-                        innerTextField()
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Кнопка "Добавить"
-                Button(
-                    onClick = {
-                        // Отправка данных на сервер через Ktor
-                        val newEvent = EventEntity(
-                            id = 0, // Можно генерировать или оставить 0 для новой записи
-                            startTime = LocalDateTime.parse(startTime.text, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                            endTime = LocalDateTime.parse(endTime.text, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                            status = status.text,
-                            title = title.text,
-                            description = description.text,
-                            calories = 100, // Пример значения
-                            category = "General", // Пример категории
+            Button(
+                onClick = {
+                    try {
+                        // Преобразуем строковые значения в нужные типы данных
+                        val event = EventEntity(
+                            id = 0L, // Пока ID не определено, можно установить 0 или генерировать ID на сервере
+                            title = title.value.text,
+                            description = description.value.text,
+                            status = status.value.text,
+//                            startTime = LocalDateTime.parse(startTime.value.text, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+//                            endTime = LocalDateTime.parse(endTime.value.text, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                            startTime = LocalDateTime.now(),
+                            endTime = LocalDateTime.now(),
+                            calories = calories.value.text.toIntOrNull() ?: 0,
+                            category = category.value.text,
                             createdAt = LocalDateTime.now(),
                             updatedAt = LocalDateTime.now()
                         )
-                        coroutineScope.launch {
-//                            viewModel.addEvent(newEvent) // Ваш метод для отправки запроса через Ktor
-                        }
-                        onDismiss() // Закрыть Popup
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Добавить")
-                }
 
-                // Кнопка закрытия Popup
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = onDismiss) {
-                    Text(text = "Закрыть")
-                }
+                        // Добавляем событие в ViewModel
+                        viewModel.addEvent(event, context)
+
+                        // Закрываем попап
+                        onDismiss()
+                    } catch (e: Exception) {
+                        // Обработка ошибок парсинга времени или данных
+                        // Например, можно показать сообщение об ошибке пользователю
+                        println("Ошибка добавления события: ${e.message}")
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Добавить")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Закрыть")
             }
         }
     }
 }
+
+

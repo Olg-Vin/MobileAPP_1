@@ -1,5 +1,6 @@
 package com.vinio.sportapplication.bottomNavigation.startScreens
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,7 +14,7 @@ import com.vinio.sportapplication.bottomNavigation.mainScreens.navigation.MainSc
 
 @Composable
 fun StartNavGraph(
-    navHostController: NavHostController
+    navHostController: NavHostController,
 ) {
     NavHost(navController = navHostController, startDestination = "sign_in") {
         composable("sign_in") {
