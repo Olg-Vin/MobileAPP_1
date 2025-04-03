@@ -143,6 +143,18 @@ fun TaskPopupDialog(event: EventEntity, onDismiss: () -> Unit) {
                 ) {
                     Text(text = "Закрыть")
                 }
+                Button(
+                    onClick = { onDismiss()
+                        coroutineScope.launch {
+                            deleteEventFromServer(
+                                event.id,
+                                context
+                            )
+                        }},
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Удалить")
+                }
             }
         }
     }
